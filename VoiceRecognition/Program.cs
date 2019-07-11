@@ -20,7 +20,7 @@ namespace VoiceRecognition
             sp = new SpeechSynthesizer();
 
             //conversas
-            string[] conversas = { "Olá", "Boa noite", "Boa tarde", "Tudo Bem" };
+            string[] conversas = { "Olá", "Boa noite", "Boa tarde", "Tudo bem" };
             Choices c_conversas = new Choices(conversas);
 
             GrammarBuilder gb_conversas = new GrammarBuilder();
@@ -56,12 +56,14 @@ namespace VoiceRecognition
             if(e.Result.Confidence >= 0.4f)
             {
                 string speech = e.Result.Text;
-                Console.WriteLine("Você disse: " + speech + " Confiança: " + e.Result.Confidence);
+                Console.WriteLine("Você disse: " + speech + " || Confiança: " + e.Result.Confidence);
                 switch (e.Result.Grammar.Name)
                 {
                     case "conversas":
+                        processConversa(speech);
                         break;
                     case "sistema":
+                        processSistema(speech);
                         break;
                     default:
                         break;
@@ -70,6 +72,44 @@ namespace VoiceRecognition
             else
             {
                 Speak("Não ouvi sua voz claramente, fale novamente...");
+            }
+        }
+
+        private static void processConversa(string conversa)
+        {
+            switch (conversa)
+            {
+                case "Olá":
+                    Speak("Olá, como vai?");
+                    break;
+                case "Boa noite":
+                    Speak("Boa noite, como vai?");
+                    break;
+                case "Boa tarde":
+                    Speak("Boa tarde, como vai?");
+                    break;
+                case "Tudo bem":
+                    Speak("Show de bola");
+                    break;
+                default:
+                    Speak("Ok");
+                    break;
+            }
+        }
+
+        private static void processSistema(string comando)
+        {
+            switch (comando)
+            {
+                case "que horas são":
+                    Speak(DateTime.Now.ToShortTimeString());
+                    break;
+                case "que dia é hoje":
+                    Speak(DateTime.Now.Date.ToShortDateString());
+                    break;
+                default:
+                    Speak("Ok");
+                    break;
             }
         }
 
